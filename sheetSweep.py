@@ -8,17 +8,21 @@ primarily for HC Ally attendance management
 import pygsheets
 import csv
 
+#function to mark cells
 def markCell(rowNum, column, wks):
     cellID = column + str(rowNum)
-    wks.update_value(cellID, 'x')
-    
+    c = wks.cell(cellID)
+    c.color = (0,1.0,0,0)
+
+
 client = pygsheets.authorize(service_file='credentials.json')
-sheet = client.open("Copy of FYM Attendance Record")
-wks = sheet.worksheet('index',0)
+sheet = client.open("FYM Attendance Record")
+wks = sheet[0]
+
 
 names = client.get_range("1TQ0siChZ7kG3K6vDWLr_l1epbU9i_GD5d2YQCi_hrsQ", "A2:A60", "ROWS")
 
-file = input("Enter filepath to Excel file: ")
+file = input("Enter filepath to csv file: ")
 column = input("Enter the column of the Drive sheet to edit: ")
 with open(file, 'r') as csvfile:
     reader = csv.reader(csvfile)
@@ -30,16 +34,22 @@ with open(file, 'r') as csvfile:
     rowNum = 0
     for row in reader:
         s = row[0] + " " + row[1]
-        if s == 'Megan Maniar':
+        if s == "Bell Tseng":
+            rowNum = 22
+            markCell(rowNum, column, wks)
+        elif s == 'Megan Maniar':
             rowNum = 39
+            markCell(rowNum, column, wks)
         elif s == 'Nivedita Rajiv':
             rowNum = 45
+            markCell(rowNum, column, wks)
         elif s == 'Shanrui Yu':
             rowNum = 53
+            markCell(rowNum, column, wks)
         elif s == 'Tianqi Li':
             rowNum = 57
+            markCell(rowNum, column, wks)
         elif [s] in names:
             rowNum = names.index([s])+2
-        markCell(rowNum,column, wks)
-        
+            markCell(rowNum, column, wks)
         
